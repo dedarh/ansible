@@ -1,0 +1,12 @@
+---
+- hosts: jenkins
+  gather_facts: False
+  roles:
+  - jenkins-common
+  sudo: yes
+- hosts: Docker
+  gather_facts: False
+  roles:
+  - docker-init
+  sudo: yes
+
