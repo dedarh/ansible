@@ -1,0 +1,28 @@
+---
+- name: Add Docker
+  become: true
+  shell: wget https://get.docker.com -O setup.sh
+  tags: [docker]
+- name: Chmod Docker
+  shell: sudo chmod +x /home/ubuntu/setup.sh
+  tags: [docker]  
+- name: Run Docker
+  shell: sh /home/ubuntu/setup.sh
+  tags: [docker]  
+- name: Add user to Docker 
+  shell: sudo usermod -a -G docker ubuntu
+  tags: [docker]
+
+- name: enable sysv dockerd service
+  become: true
+  service:
+ name: docker.service
+ enabled: yes
+  tags: [docker]
+
+- name: Start service
+  become: true
+  service:
+ name: docker.service
+ state: started
+  tags: [docker]
