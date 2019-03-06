@@ -1,13 +1,16 @@
 # Hosts
-
-manager ansible_host=84.201.147.223 ansible_ssh_user=admin ansible_ssh_private_key_file=/home/admin/key
-worker1 ansible_host=84.201.150.75 ansible_ssh_user=admin ansible_ssh_private_key_file=/home/admin/key
 [swarm-managers]
-manager
+84.201.147.223
 
 [swarm-workers]
-worker1
+84.201.150.75
 
 [swarm:children]
 swarm-managers
 swarm-workers
+
+[swarm:vars]
+ansible_ssh_user=admin
+ansible_ssh_private_key_file=/home/admin/key
+ansible_python_interpreter=/usr/bin/python3
+

@@ -10,3 +10,13 @@
   command: docker swarm init --advertise-addr={{ swarm_iface | default('eth0') }}:2377
   register: bootstrap_first_node
   tags: [dockermanager]
+
+
+- name: initialize swarm cluster token
+  become: yes
+  command: docker swarm join-token worker -q
+  register: worker_token
+  tags: [dockermanager]
+
+- name: Show Master Token
+  debug: var=worker_token.stdout

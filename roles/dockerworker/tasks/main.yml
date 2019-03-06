@@ -1,4 +1,8 @@
 ---
+- name: Show Master Token
+  debug: var=hostvars[groups['swarm-managers'][0]]['worker_token']['stdout'] 
+- name: Show Master Host
+  debug: var=hostvars[groups['swarm-managers'][0]]['inventory_hostname']
 - name: leaving older swarm
   command: docker swarm leave -f
   become: yes
@@ -6,7 +10,7 @@
   tags: [swarm]
 
 - name: join nodes to manager
-  command: docker swarm join --token={{ tokennode }} {{ hostmanager }}
+  command: docker swarm join --token={{ hostvars[groups['swarm-managers'][0]]['worker_token']['stdout'] }} {{ hostvars[groups["swarm-managers"][0]]["inventory_hostname"] }}:2377
   become: yes
   register: swarm_join_result
   failed_when: not "'This node is already part of a swarm' in command_result.stderr"
