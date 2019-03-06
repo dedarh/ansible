@@ -4,13 +4,13 @@
   shell: wget https://get.docker.com -O setup.sh
   tags: [docker]
 - name: Chmod Docker
-  shell: sudo chmod +x /home/ubuntu/setup.sh
+  shell: sudo chmod +x /home/admin/setup.sh
   tags: [docker]  
 - name: Run Docker
-  shell: sh /home/ubuntu/setup.sh
+  shell: sh /home/admin/setup.sh
   tags: [docker]  
 - name: Add user to Docker 
-  shell: sudo usermod -a -G docker ubuntu
+  shell: sudo usermod -a -G docker admin
   tags: [docker]
 
 - name: enable sysv dockerd service

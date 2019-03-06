@@ -1,7 +1,0 @@
----
-- hosts: Docker
-  gather_facts: False
-  roles:
-  - docker-init
-  sudo: yes
-
