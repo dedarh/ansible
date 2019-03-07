@@ -15,3 +15,172 @@
     apt:
       update_cache=yes
       name=jenkins state=present
+  - name: wait for a initialAdminPassword to be created
+    wait_for: path=/var/lib/jenkins/secrets/initialAdminPassword
+  
+  - name: read initial admin password and register
+    command: cat /var/lib/jenkins/secrets/initialAdminPassword
+    register: pass
+
+  - name: Wait for Jenkins to start up before proceeding.
+    shell: "curl -D - --silent --max-time 5 http://localhost:8080/cli/"
+    register: result
+    until: (result.stdout.find("403 Forbidden") != -1) or (result.stdout.find("200 OK") != -1) and (result.stdout.find("Please wait while") == -1)
+    retries: "60"
+    delay: "5"
+    changed_when: false
+
+  - name: get jenkins-cli.jar
+    get_url: url=http://localhost:8080/jnlpJars/jenkins-cli.jar dest=/tmp/
+
+  - name: chmod jenkins.jar
+    file:
+     path: /tmp/jenkins-cli.jar
+     mode: 777
+
+  - name: Wait for Jenkins to start up before proceeding.
+    shell: "curl -D - --silent --max-time 5 http://localhost:8080/cli/"
+    register: result
+    until: (result.stdout.find("403 Forbidden") != -1) or (result.stdout.find("200 OK") != -1) and (result.stdout.find("Please wait while") == -1)
+    retries: "60"
+    delay: "5"
+    changed_when: false
+
+  - name: install plugins
+    command: sudo java -jar /tmp/jenkins-cli.jar -auth admin:{{ pass.stdout }} -s http://localhost:8080/ install-plugin {{item}}
+    with_items:
+      - docker-plugin
+      - ssh-slaves
+      - durable-task
+      - ace-editor
+      - analysis-core
+      - ansicolor
+      - ant
+      - blueocean
+      - blueocean-autofavorite
+      - blueocean-i18n
+      - blueocean-commons
+      - blueocean-config
+      - blueocean-dashboard
+      - blueocean-display-url
+      - blueocean-events
+      - blueocean-jwt
+      - blueocean-git-pipeline
+      - blueocean-github-pipeline
+      - blueocean-personalization
+      - blueocean-pipeline-api-impl
+      - blueocean-pipeline-editor
+      - blueocean-rest
+      - blueocean-rest-impl
+      - blueocean-web
+      - bouncycastle-api
+      - branch-api
+      - build-name-setter
+      - build-pipeline-plugin
+      - cloudbees-folder
+      - conditional-buildstep
+      - config-file-provider
+      - credentials
+      - credentials-binding
+      - dashboard-view
+      - delivery-pipeline-plugin
+      - display-url-api
+      - docker-commons
+      - docker-plugin
+      - docker-workflow
+      - durable-task
+      - envinject
+      - favorite
+      - git
+      - git-client
+      - git-server
+      - github
+      - github-api
+      - github-branch-source
+      - github-organization-folder
+      - github-sqs-plugin
+      - greenballs
+      - handlebars
+      - htmlpublisher
+      - icon-shim
+      - ivy
+      - jackson2-api
+      - javadoc
+      - job-dsl
+      - jobConfigHistory
+      - join
+      - jquery
+      - jquery-detached
+      - junit
+      - kubernetes
+      - mailer
+      - mapdb-api
+      - matrix-project
+      - maven-plugin
+      - metrics
+      - momentjs
+      - multiple-scms
+      - nant
+      - nested-view
+      - next-build-number
+      - parameterized-trigger
+      - pipeline-build-step
+      - pipeline-github-lib
+      - pipeline-graph-analysis
+      - pipeline-input-step
+      - pipeline-model-api
+      - pipeline-model-definition
+      - pipeline-model-declarative-agent
+      - pipeline-model-extensions
+      - pipeline-milestone-step
+      - pipeline-rest-api
+      - pipeline-stage-step
+      - pipeline-stage-tags-metadata
+      - pipeline-stage-view
+      - plain-credentials
+      - project-description-setter
+      - project-inheritance
+      - promoted-builds
+      - pubsub-light
+      - rebuild
+      - run-condition
+      - scm-api
+      - script-security
+      - sectioned-view
+      - sse-gateway
+      - ssh-credentials
+      - structs
+      - subversion
+      - support-core
+      - timestamper
+      - token-macro
+      - variant
+      - view-job-filters
+      - workflow-aggregator
+      - workflow-api
+      - workflow-basic-steps
+      - workflow-cps
+      - workflow-cps-global-lib
+      - workflow-durable-task-step
+      - workflow-job
+      - workflow-multibranch
+      - workflow-scm-step
+      - workflow-step-api
+      - workflow-support
+
+  - name: create a Jenkins users.
+    shell: echo 'jenkins.model.Jenkins.instance.securityRealm.createAccount("dedarh", "{{ admin_password }}")' | sudo java -jar /tmp/jenkins-cli.jar -s "http://localhost:8080" -auth admin:{{ pass.stdout }} groovy = –
+
+
+ 
+  - name: restart jenkins
+    service: name=jenkins state=restarted
+
+  - name: print secure variable
+    debug: msg="my secure login {{ admin_login }}"
+  
+  - name: print secure variable
+    debug: msg="my secure login {{ admin_password }}"
+
+  - name: print secure variable
+    debug: msg="jenkins key {{ pass.stdout }}"

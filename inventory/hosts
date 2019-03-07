@@ -1,12 +1,12 @@
 # Hosts
 [swarm-managers]
-84.201.147.223
+84.201.151.87
 
 [swarm-workers]
-84.201.150.75
+84.201.148.76
 
 [jenkins]
-jenkins ansible_ssh_host=192.168.0.21
+jenkins ansible_ssh_host=84.201.151.31
 
 [swarm:children]
 swarm-managers
