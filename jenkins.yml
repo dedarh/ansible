@@ -1,0 +1,10 @@
+---
+  - name: Configure Jenkins server
+    hosts: jenkins
+    become: yes
+    become_method: sudo
+    gather_facts: no
+    roles:
+        - basic
+        - java
+        - jenkins
