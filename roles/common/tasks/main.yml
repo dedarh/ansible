@@ -1,4 +1,0 @@
-- name: cheack
-  become: true
-  shell: pwd
-  tags: [common]
