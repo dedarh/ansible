@@ -1,0 +1,11 @@
+---
+  - name: Configure CockroachDB server
+    hosts: CockroachDB
+    vars_files:
+            - 'secret_vars.yml'
+    become: yes
+    become_method: sudo
+    gather_facts: no
+    roles:
+        - cockroachdb
+

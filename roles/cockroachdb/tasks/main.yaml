@@ -1,0 +1,14 @@
+---
+- name: Download CockroachDB
+  get_url:
+    url: "https://binaries.cockroachdb.com/cockroach-v2.1.5.linux-amd64.tgz"
+    dest: /tmp/cockroach-v2.1.5.linux-amd64.tgz
+
+- name: Extract the CockroachDB
+  unarchive:
+    src: /tmp/cockroach-v2.1.5.linux-amd64.tgz
+    dest: /tmp
+    remote_src: yes
+
+- name: Copy the binary
+  command: cp -i /tmp/cockroach-v2.1.5.linux-amd64/cockroach /usr/local/bin
