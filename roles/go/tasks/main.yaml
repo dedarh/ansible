@@ -1,0 +1,7 @@
+---
+- name: Install quicktemlate
+  shell: go get -u github.com/valyala/quicktemplate
+
+- name: Install quicktemlate
+  shell: go get -u github.com/valyala/quicktemplate/qtc
+

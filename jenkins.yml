@@ -8,5 +8,5 @@
     gather_facts: no
     roles:
         - basic
-        - java
-        - jenkins
+          #   - java
+          #   - jenkins
