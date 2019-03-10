@@ -1,0 +1,10 @@
+---
+  - name: Configure consul server
+    hosts: consul
+    vars_files:
+            - 'secret_vars.yml'
+    become: yes
+    become_method: sudo
+    gather_facts: no
+    roles:
+        - consul

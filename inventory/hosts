@@ -11,6 +11,9 @@ jenkins ansible_ssh_host=84.201.151.31
 [CockroachDB]
 CockroachDB ansible_ssh_host=84.201.148.6
 
+[consul]
+consul ansible_ssh_host=84.201.149.58
+
 [swarm:children]
 swarm-managers
 swarm-workers
@@ -30,3 +33,7 @@ ansible_ssh_user=admin
 ansible_ssh_private_key_file=/home/admin/key
 ansible_python_interpreter=/usr/bin/python
 
+[consul:vars]
+ansible_ssh_user=admin
+ansible_ssh_private_key_file=/home/admin/key
+ansible_python_interpreter=/usr/bin/python

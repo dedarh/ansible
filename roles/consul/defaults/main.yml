@@ -1,0 +1,7 @@
+---
+consul_version: 1.4.3
+consul_ui_version: 1.4.3
+consul_addon_version:
+  "consul-template": 0.10.0
+  envconsul: 0.5.0
+  "consul-replicate": 0.2.0

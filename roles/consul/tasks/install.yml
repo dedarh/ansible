@@ -1,0 +1,19 @@
+---
+- apt:
+    pkg: unzip
+    state: latest
+
+- get_url:
+    url: "https://releases.hashicorp.com/consul/{{ consul_version }}/{{ consul_archive }}"
+    dest: "/tmp/{{ consul_archive }}"
+
+- unarchive:
+    src: "/tmp/{{ consul_archive }}"
+    dest: /opt/consul/bin
+    copy: no
+
+- file:
+    state: link
+    src: /opt/consul/bin/consul
+    dest: /usr/local/bin/consul
+    force: yes
