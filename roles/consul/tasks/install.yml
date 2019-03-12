@@ -18,7 +18,10 @@
     dest: /usr/local/bin/consul
     force: yes
 
-- name: put systemd file
+- name: Put systemd file
   copy:
     src: consul.service
     dest: /TOODO/
+    
+- name: Start consul
+  command: consul agent -dev -bind=127.0.0.1 -client=0.0.0.0 -config-dir /etc/consul.d -ui
