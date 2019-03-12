@@ -22,6 +22,9 @@
   copy:
     src: consul.service
     dest: /TOODO/
-    
+
+- name: systemctl daemon-reload
+  command: systemctl daemon-reload
+  
 - name: Start consul
-  command: consul agent -dev -bind=127.0.0.1 -client=0.0.0.0 -config-dir /etc/consul.d -ui
+  command: systemctl start consul
