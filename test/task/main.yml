@@ -1,0 +1,5 @@
+  tasks:
+    - name: Ansible Template Example
+      template:
+        src: template/CocroachDb.j2
+        dest: template/CocroachDb.json
