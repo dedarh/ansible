@@ -28,5 +28,5 @@ App Host-->Cockroachdb Host: select update insert
 Docker Host-->Consul Host: select task for student
 Docker Host-->Docker Host: run Docker console for student
 ```
-
+                    
 ###End
