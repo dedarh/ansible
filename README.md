@@ -30,3 +30,8 @@ Docker Host-->Docker Host: run Docker console for student
 ```
                     
 ###End
+sequenceDiagram
+    participant A as Alice
+    participant J as John
+    A->>J: Hello John, how are you?
+    J->>A: Great!
