@@ -38,7 +38,7 @@
 
 - name: register docker sercice with curl check
   consul:
-    service_name: docker
+    service_name: docker-master
     service_port: 80
     script: curl http://{{ hostvars[groups["swarm-managers"][0]]["inventory_hostname"] }}/
     interval: 60s
@@ -47,7 +47,7 @@
       
 - name: register docker-swarm sercice with curl check
   consul:
-    service_name: docker
+    service_name: docker-slave
     service_port: 81
     script: curl http://{{ hostvars[groups["swarm-workers"][0]]["inventory_hostname"] }}/
     interval: 60s
