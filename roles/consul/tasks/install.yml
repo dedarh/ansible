@@ -21,7 +21,7 @@
 - name: Put systemd file
   copy:
     src: consul.service
-    dest: /TOODO/
+    dest: /etc/systemd/system/consul.service
 
 - name: systemctl daemon-reload
   command: systemctl daemon-reload
