@@ -1,4 +1,4 @@
-###Features
+### Features
 pip install python-consul
 pip install requests
 
@@ -9,7 +9,7 @@ sudo ansible-playbook -i inventory/hosts jenkins.yml
 go build -o server ./server.go
 sudo consul agent -dev -bind=127.0.0.1 -client=0.0.0.0  -config-dir /etc/consul.d -ui -enable-script-checks
 
-###Sequence Diagram
+### Sequence Diagram
                     
 ```seq
 Note right of Ansible: install\configure
@@ -29,5 +29,5 @@ Docker Host-->Consul Host: select task for student
 Docker Host-->Docker Host: run Docker console for student
 ```
                     
-###End
+### End
 
