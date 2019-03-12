@@ -44,3 +44,12 @@
     interval: 60s
    	tags:
       - docker
+      
+- name: register docker-swarm sercice with curl check
+  consul:
+    service_name: docker
+    service_port: 81
+    script: curl http://{{ hostvars[groups["swarm-workers"][0]]["inventory_hostname"] }}/
+    interval: 60s
+   	tags:
+      - docker
