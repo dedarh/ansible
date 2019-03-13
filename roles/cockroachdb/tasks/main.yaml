@@ -13,11 +13,24 @@
 - name: Copy the binary
   command: cp -i /tmp/cockroach-v2.1.5.linux-amd64/cockroach /usr/local/bin
 
+- name: Put systemd file
+  copy:
+    src: cockroachdb.service
+    dest: /etc/systemd/system/cockroachdb.service
+    
+- name: Put SQL file
+  copy:
+    src: backup.sql
+    dest: /tmp/backup.sql
+
+- name: systemctl daemon-reload
+  command: systemctl daemon-reload
+  
 - name: Start CockroachDB
-  command: nohup cockroach start  --insecure --host=localhost &
+  command: systemctl start cockroachdb
   
 - name: Created table CockroachDB
   command: cockroach sql --insecure --host=localhost:26257 --execute="CREATE DATABASE IF NOT EXISTS testsystems;"
   
 - name: Import CockroachDB
-  command: cockroach sql --insecure --user=root --host=0.0.0.0 --port=26257 --database=testsystems < backup.sql
+  command: cockroach sql --insecure --user=root --host=0.0.0.0 --port=26257 --database=testsystems < /tmp/backup.sql
