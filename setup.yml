@@ -1,0 +1,49 @@
+---
+  - name: Configure consul server
+    hosts: consul
+    vars_files:
+            - 'secret_vars.yml'
+    become: yes
+    become_method: sudo
+    gather_facts: no
+    roles:
+        - consul
+        - consulregister
+        
+  - name: Configure Jenkins server
+    hosts: jenkins
+    vars_files:
+            - 'secret_vars.yml'
+    become: yes
+    become_method: sudo
+    gather_facts: no
+    roles:
+        - basic
+        - java
+        - jenkins
+ 
+ - name: Install docker
+   hosts: swarm
+   roles:
+        - docker
+
+ - name: Configure Manager
+   hosts: swarm-managers
+   roles:
+      - dockermanager
+      - basic
+
+ - name: Configure Workers
+   hosts: swarm-workers
+   roles:
+     - dockerworker
+   
+ - name: Configure CockroachDB server
+   hosts: CockroachDB
+    vars_files:
+            - 'secret_vars.yml'
+   become: yes
+   become_method: sudo
+   gather_facts: no
+   roles:
+      - cockroachdb
