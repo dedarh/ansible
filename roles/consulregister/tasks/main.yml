@@ -1,5 +1,5 @@
 ---
- - name: Ansible Template Example
+ - name: Consul servicse Template
    template:
      src: "service1.json.j2"
      dest: "/tmp/service_{{ item.name }}.json"
@@ -14,7 +14,7 @@
     - { name: "docker-master", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "}
     - { name: "docker-slave", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "} 
  
- - name: Install consul module
+ - name: Install consul module from curl
    shell: curl --request PUT --data @/tmp/service_{{ item.name }}.json http://127.0.0.1:8500/v1/catalog/register
    with_items:
     - { name: "cocroachdb", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: 'curl -o -I -L -s -w "%{http_code}" http://{{ hostvars["CockroachDB_host"].ansible_ssh_host }}:8080/#/overview/list' }
@@ -24,7 +24,23 @@
     - { name: "docker-master", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "}
     - { name: "docker-slave", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "}
 
-
+ - name: Install consul module from uri
+   uri: 
+    url: "http://127.0.0.1:8500/v1/catalog/register"
+    method: PUT
+    return_content: yes
+    HEADER_Content-Type: "application/json"
+    body: "{{ lookup('file','tmp/service_{{ item.name }}.json') | to_json }}"
+   with_items:
+    - { name: "cocroachdb"}
+    - { name: "jenkins"}
+    - { name: "webapp"}
+    - { name: "docker-console"}
+    - { name: "docker-master"}
+    - { name: "docker-slave"}
+    
+    
+    
       # - name: register cocroachdb sercice with curl check
       #consul:
       #host: 127.0.0.1
