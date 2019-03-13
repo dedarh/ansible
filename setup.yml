@@ -22,28 +22,29 @@
         - java
         - jenkins
  
- - name: Install docker
-   hosts: swarm
-   roles:
+ 
+  - name: Install docker
+    hosts: swarm
+    roles:
         - docker
 
- - name: Configure Manager
-   hosts: swarm-managers
-   roles:
+  - name: Configure Manager
+    hosts: swarm-managers
+    roles:
       - dockermanager
       - basic
 
- - name: Configure Workers
-   hosts: swarm-workers
-   roles:
+  - name: Configure Workers
+    hosts: swarm-workers
+    roles:
      - dockerworker
    
- - name: Configure CockroachDB server
-   hosts: CockroachDB
+  - name: Configure CockroachDB server
+    hosts: CockroachDB
     vars_files:
             - 'secret_vars.yml'
-   become: yes
-   become_method: sudo
-   gather_facts: no
-   roles:
+    become: yes
+    become_method: sudo
+    gather_facts: no
+    roles:
       - cockroachdb

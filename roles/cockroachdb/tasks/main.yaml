@@ -24,13 +24,13 @@
     dest: /tmp/backup.sql
 
 - name: systemctl daemon-reload
-  command: systemctl daemon-reload
+  command: sudo systemctl daemon-reload
   
 - name: Start CockroachDB
-  command: systemctl start cockroachdb
+  command: sudo systemctl start cockroachdb
   
 - name: Created table CockroachDB
-  command: cockroach sql --insecure --host=localhost:26257 --execute="CREATE DATABASE IF NOT EXISTS testsystems;"
+  shell: cockroach sql --insecure --host=0.0.0.0:26257 --execute="CREATE DATABASE IF NOT EXISTS testsystems;"
   
 - name: Import CockroachDB
-  command: cockroach sql --insecure --user=root --host=0.0.0.0 --port=26257 --database=testsystems < /tmp/backup.sql
+  shell: cockroach sql --insecure --user=root --host=0.0.0.0 --port=26257 --database=testsystems < /tmp/backup.sql

@@ -7,37 +7,23 @@
      group: "root"
      mode: 0777
    with_items:
-    - { name: "cocroachdb", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: 'curl -o -I -L -s -w "%{http_code}" http://{{ hostvars["CockroachDB_host"].ansible_ssh_host }}:8080/#/overview/list' }
-    - { name: "jenkins", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "}
-    - { name: "webapp", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "}
-    - { name: "docker-console", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "}
-    - { name: "docker-master", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "}
-    - { name: "docker-slave", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "} 
+    - { name: "cocroachdb", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: "health" }
+    - { name: "jenkins", ip: "{{ hostvars['jenkins_host'].ansible_ssh_host }}", port: 8080, script: " "}
+    - { name: "webapp", ip: "{{hostvars[groups['swarm-managers'][0]]['inventory_hostname']}}", port: 80, script: " "}
+    - { name: "docker-console", ip: "{{hostvars[groups['swarm-managers'][0]]['inventory_hostname']}}", port: 8080, script: " "}
+    - { name: "docker-master", ip: "{{hostvars[groups['swarm-managers'][0]]['inventory_hostname']}}", port: 8090, script: " "}
+    - { name: "docker-slave", ip: "{{hostvars[groups['swarm-workers'][0]]['inventory_hostname']}}", port: 8070, script: " "} 
  
  - name: Install consul module from curl
-   shell: curl --request PUT --data @/tmp/service_{{ item.name }}.json http://127.0.0.1:8500/v1/catalog/register
+   shell: curl --request PUT --data @/tmp/service_{{ item.name }}.json http://localhost:8500/v1/agent/service/register
    with_items:
-    - { name: "cocroachdb", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: 'curl -o -I -L -s -w "%{http_code}" http://{{ hostvars["CockroachDB_host"].ansible_ssh_host }}:8080/#/overview/list' }
+    - { name: "cocroachdb", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: 'http://{{ hostvars["CockroachDB_host"].ansible_ssh_host }}:8080/#/overview/list' }
     - { name: "jenkins", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "}
     - { name: "webapp", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "}
     - { name: "docker-console", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "}
     - { name: "docker-master", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "}
     - { name: "docker-slave", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "}
 
- - name: Install consul module from uri
-   uri: 
-    url: "http://127.0.0.1:8500/v1/catalog/register"
-    method: PUT
-    return_content: yes
-    HEADER_Content-Type: "application/json"
-    body: "{{ lookup('file','/tmp/service_{{ item.name }}.json') | to_json }}"
-   with_items:
-    - { name: "cocroachdb"}
-    - { name: "jenkins"}
-    - { name: "webapp"}
-    - { name: "docker-console"}
-    - { name: "docker-master"}
-    - { name: "docker-slave"}
     
     
     

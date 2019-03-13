@@ -6,7 +6,7 @@ After=network-online.target
 [Service]
 Type=simple
 Restart=on-failure
-ExecStart=/usr/local/bin/cockroach start  --insecure --host=localhost
+ExecStart=/usr/local/bin/cockroach start  --insecure --host=0.0.0.0
 KillSignal=SIGTERM
 User=root
 Group=root

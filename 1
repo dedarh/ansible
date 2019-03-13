@@ -1,0 +1,44 @@
+{
+  "Datacenter": "dc1",
+  "Node": "{{ item.name }}",
+  "Address": "{{ item.ip }}",
+  "Service": {
+    "ID": "{{ item.name }}",
+    "Service": "{{ item.name }}",
+    "Tags": [
+      "v1"
+    ],
+    "Address": "{{ item.ip }}",
+    "Port": {{ item.port }}
+  },
+  "Check": [{
+    "Node": "{{ item.name }}",
+    "CheckID": "service1:{{ item.name }}",
+    "Name": "TCP health check",
+    "Notes": "Script based health check",
+    "Status": "passing",
+    "ServiceID": "{{ item.name }}",
+    "Definition": {
+      "TCP": "{{ item.ip }}:{{ item.port }}",
+      "Interval": "5s",
+      "Timeout": "1s",
+      "DeregisterCriticalServiceAfter": "30s"
+    }
+  },
+{
+    "Node": "{{ item.name }}",
+    "CheckID": "service2:{{ item.name }}",
+    "Name": "Curl health check",
+    "Notes": "Script based health check",
+    "Status": "passing",
+    "ServiceID": "{{ item.name }}",
+    "Definition": {
+      "Script": "{{ item.script }}",
+      "Interval": "5s",
+      "Timeout": "1s",
+      "DeregisterCriticalServiceAfter": "30s"
+    }
+  }
+],
+  "SkipNodeUpdate": false
+}
