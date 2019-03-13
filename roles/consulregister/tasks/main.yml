@@ -30,7 +30,7 @@
     method: PUT
     return_content: yes
     HEADER_Content-Type: "application/json"
-    body: "{{ lookup('file','tmp/service_{{ item.name }}.json') | to_json }}"
+    body: "{{ lookup('file','/tmp/service_{{ item.name }}.json') | to_json }}"
    with_items:
     - { name: "cocroachdb"}
     - { name: "jenkins"}
