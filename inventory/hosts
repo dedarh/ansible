@@ -1,15 +1,15 @@
 # Hosts
 [swarm-managers]
-130.193.35.154
+130.193.35.209
 
 [swarm-workers]
-130.193.35.223
+130.193.45.198
 
 [jenkins]
 jenkins_host ansible_ssh_host=84.201.151.31
 
 [CockroachDB]
-CockroachDB_host ansible_ssh_host=84.201.150.68
+CockroachDB_host ansible_ssh_host=130.193.35.252
 
 [consul]
 consul_host ansible_ssh_host=84.201.149.58

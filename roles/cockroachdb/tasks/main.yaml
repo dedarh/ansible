@@ -11,7 +11,7 @@
     remote_src: yes
 
 - name: Copy the binary
-  command: cp -i /tmp/cockroach-v2.1.5.linux-amd64/cockroach /usr/local/bin
+  command: cp -f /tmp/cockroach-v2.1.5.linux-amd64/cockroach /usr/local/bin
 
 - name: Put systemd file
   copy:
@@ -28,6 +28,10 @@
   
 - name: Start CockroachDB
   command: sudo systemctl start cockroachdb
+
+
+- name: Start sleep
+  command: sleep 60s
   
 - name: Created table CockroachDB
   shell: cockroach sql --insecure --host=0.0.0.0:26257 --execute="CREATE DATABASE IF NOT EXISTS testsystems;"

@@ -1,0 +1,36 @@
+---
+- apt:
+    pkg: unzip
+    state: latest
+
+- get_url:
+    url: "https://releases.hashicorp.com/consul/{{ consul_version }}/{{ consul_archive }}"
+    dest: "/tmp/{{ consul_archive }}"
+
+- unarchive:
+    src: "/tmp/{{ consul_archive }}"
+    dest: /opt/consul/bin
+    copy: no
+
+- file:
+    state: link
+    src: /opt/consul/bin/consul
+    dest: /usr/local/bin/consul
+    force: yes
+
+- name: Consul servicse Template
+  template:
+     src: "service.json.j2"
+     dest: "/etc/systemd/system/consulagent.service"
+     owner: "root"
+     group: "root"
+     mode: 0777
+  with_items:
+          - { host: "{{ ansible_ssh_host }}", ip: "{{ hostvars['consul_host'].ansible_ssh_host }}" }
+
+
+- name: systemctl daemon-reload
+  command: systemctl daemon-reload
+  
+- name: Start consul
+  command: systemctl start consulagent

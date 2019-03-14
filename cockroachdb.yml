@@ -7,5 +7,5 @@
     become_method: sudo
     gather_facts: no
     roles:
-        - cockroachdb
-
+            # - cockroachdb
+        - consulagent

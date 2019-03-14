@@ -25,17 +25,26 @@
  
   - name: Install docker
     hosts: swarm
+    become: yes
+    become_method: sudo
+    gather_facts: no
     roles:
         - docker
 
   - name: Configure Manager
     hosts: swarm-managers
+    become: yes
+    become_method: sudo
+    gather_facts: no
     roles:
       - dockermanager
       - basic
 
   - name: Configure Workers
     hosts: swarm-workers
+    become: yes
+    become_method: sudo
+    gather_facts: no
     roles:
      - dockerworker
    
