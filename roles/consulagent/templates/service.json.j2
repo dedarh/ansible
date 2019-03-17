@@ -6,7 +6,9 @@ After=network-online.target
 [Service]
 Type=simple
 Restart=on-failure
-ExecStart=/usr/local/bin/consul agent -data-dir /etc/consul -client {{ item.host}} -join {{ item.ip }} -config-dir /etc/consul.d/ -enable-script-checks
+ExecStart=/usr/local/bin/consul agent  -data-dir /etc/consul -server -join {{ item.ip }} -enable-script-checks
+
+
 KillSignal=SIGTERM
 User=root
 Group=root
