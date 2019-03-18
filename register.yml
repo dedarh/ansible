@@ -1,10 +1,10 @@
 ---
   - name: Register consul server
-    hosts: consul
+    hosts: swarm-managers
     vars_files:
             - 'secret_vars.yml'
     become: yes
     become_method: sudo
     gather_facts: no
     roles:
-        - consulregister
+        - consulagent

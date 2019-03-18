@@ -23,6 +23,9 @@
     src: consul.service
     dest: /etc/systemd/system/consul.service
 
+- name: open port
+  command: iptables -A INPUT -m state --state NEW -p tcp --dport 8301 -j ACCEPT
+
 - name: systemctl daemon-reload
   command: systemctl daemon-reload
   

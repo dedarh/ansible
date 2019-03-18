@@ -1,8 +1,4 @@
 ---
-- apt:
-    pkg: unzip
-    state: latest
-
 - get_url:
     url: "https://releases.hashicorp.com/consul/{{ consul_version }}/{{ consul_archive }}"
     dest: "/tmp/{{ consul_archive }}"
@@ -18,6 +14,21 @@
     dest: /usr/local/bin/consul
     force: yes
 
+- name: create dir
+  command: mkdir /etc/consul
+
+- name: Consul servicse Template
+  template:
+     src: "service1.json.j2"
+     dest: "/etc/consul/install.json"
+     owner: "root"
+     group: "root"
+     mode: 0777
+  with_items:
+          - { ip: "{{ hostvars['consul_host'].ansible_ssh_host }}" }
+
+
+
 - name: Consul servicse Template
   template:
      src: "service.json.j2"
@@ -26,8 +37,10 @@
      group: "root"
      mode: 0777
   with_items:
-          - { host: "{{ ansible_ssh_host }}", ip: "{{ hostvars['consul_host'].ansible_ssh_host }}" }
+          - { ip: "{{ hostvars['consul_host'].ansible_ssh_host }}" }
 
+- name: open port
+  command: iptables -A INPUT -m state --state NEW -p tcp --dport 8301 -j ACCEPT
 
 - name: systemctl daemon-reload
   command: systemctl daemon-reload
