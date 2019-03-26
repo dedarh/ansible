@@ -30,6 +30,7 @@
     gather_facts: no
     roles:
         - docker
+        - consul
 
   - name: Configure Manager
     hosts: swarm-managers
@@ -57,3 +58,4 @@
     gather_facts: no
     roles:
       - cockroachdb
+      - consul

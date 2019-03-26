@@ -17,6 +17,12 @@
 - name: create dir
   command: mkdir /etc/consul
 
+- name: Find my public ip
+  uri: 
+   url: http://ifconfig.me/ip
+   return_content: yes
+  register: ip_response
+
 - name: Consul servicse Template
   template:
      src: "service1.json.j2"
