@@ -21,6 +21,7 @@
         - basic
         - java
         - jenkins
+        - consulagent
  
  
   - name: Install docker
@@ -30,7 +31,7 @@
     gather_facts: no
     roles:
         - docker
-        - consul
+        - consulagent
 
   - name: Configure Manager
     hosts: swarm-managers
@@ -58,4 +59,14 @@
     gather_facts: no
     roles:
       - cockroachdb
-      - consul
+      - consulagent
+ 
+  - name: Configure consul server
+    hosts: consul
+    vars_files:
+            - 'secret_vars.yml'
+    become: yes
+    become_method: sudo
+    gather_facts: no
+    roles:
+        - consulregister

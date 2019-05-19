@@ -19,6 +19,7 @@
     dest: /etc/systemd/system/cockroachdb.service
     
 - name: Put SQL file
+  ignore_errors: yes
   copy:
     src: backup.sql
     dest: /tmp/backup.sql
@@ -35,6 +36,8 @@
   
 - name: Created table CockroachDB
   shell: cockroach sql --insecure --host=0.0.0.0:26257 --execute="CREATE DATABASE IF NOT EXISTS testsystems;"
-  
+  ignore_errors: yes
+
 - name: Import CockroachDB
   shell: cockroach sql --insecure --user=root --host=0.0.0.0 --port=26257 --database=testsystems < /tmp/backup.sql
+  ignore_errors: yes

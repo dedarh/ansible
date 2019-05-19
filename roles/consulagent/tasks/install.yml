@@ -1,4 +1,8 @@
 ---
+
+- name: install unzip
+  command: sudo apt install unzip
+
 - get_url:
     url: "https://releases.hashicorp.com/consul/{{ consul_version }}/{{ consul_archive }}"
     dest: "/tmp/{{ consul_archive }}"
@@ -16,6 +20,7 @@
 
 - name: create dir
   command: mkdir /etc/consul
+  ignore_errors: yes
 
 - name: Find my public ip
   uri: 
@@ -24,6 +29,7 @@
   register: ip_response
 
 - name: Consul servicse Template
+  ignore_errors: yes
   template:
      src: "service1.json.j2"
      dest: "/etc/consul/install.json"
@@ -36,6 +42,7 @@
 
 
 - name: Consul servicse Template
+  ignore_errors: yes
   template:
      src: "service.json.j2"
      dest: "/etc/systemd/system/consulagent.service"

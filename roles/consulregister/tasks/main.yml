@@ -7,84 +7,10 @@
      group: "root"
      mode: 0777
    with_items:
-    - { name: "cocroachdb", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: "health" }
-    - { name: "jenkins", ip: "{{ hostvars['jenkins_host'].ansible_ssh_host }}", port: 8080, script: " "}
-    - { name: "webapp", ip: "{{hostvars[groups['swarm-managers'][0]]['inventory_hostname']}}", port: 80, script: " "}
-    - { name: "docker-console", ip: "{{hostvars[groups['swarm-managers'][0]]['inventory_hostname']}}", port: 8080, script: " "}
-    - { name: "docker-master", ip: "{{hostvars[groups['swarm-managers'][0]]['inventory_hostname']}}", port: 8090, script: " "}
-    - { name: "docker-slave", ip: "{{hostvars[groups['swarm-workers'][0]]['inventory_hostname']}}", port: 8070, script: " "} 
+    - { name: "cocroachdb",node: "cocroachdb", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: "health"}
  
  - name: Install consul module from curl
-   shell: curl --request PUT --data @/tmp/service_{{ item.name }}.json http://localhost:8500/v1/agent/service/register
+   shell: curl --request PUT --data @/tmp/service_{{ item.name }}.json http://localhost:8500/v1/catalog/register
    with_items:
-    - { name: "cocroachdb", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: 'http://{{ hostvars["CockroachDB_host"].ansible_ssh_host }}:8080/#/overview/list' }
-    - { name: "jenkins", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "}
-    - { name: "webapp", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "}
-    - { name: "docker-console", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "}
-    - { name: "docker-master", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "}
-    - { name: "docker-slave", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: " "}
+    - { name: "cocroachdb", ip: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}", port: 8080, script: "health", "node": "cocroachdb"}
 
-    
-    
-    
-      # - name: register cocroachdb sercice with curl check
-      #consul:
-      #host: 127.0.0.1
-      #service_name: cocroachdb
-      #service_port: 8080
-      #service_address: "{{ hostvars['CockroachDB_host'].ansible_ssh_host }}"
-      #script: curl -o -I -L -s -w "%{http_code}" http://{{ hostvars['CockroachDB_host'].ansible_ssh_host }}:8080/#/overview/list
-      #interval: 10s
-      #tags:
-      #- database
-
-      # - name: register jenkins sercice with curl check
-      #consul:
-      #service_name: jenkins
-      #service_port: 8080
-      #service_address: "{{ hostvars['jenkins_host'].ansible_ssh_host }}"
-      #script:  curl -o -I -L -s -w "%{http_code}" http://{{ hostvars['jenkins_host'].ansible_ssh_host }}:8080/login
-      #interval: 60s
-      #tags:
-      #- jenkins
-
-      #- name: register app sercice with curl check
-      #consul:
-      #service_name: app
-      #service_port: 4580
-      #service_address: "{{hostvars[groups['swarm-managers'][0]]['inventory_hostname']}}"
-      #script: curl http://{{hostvars[groups['swarm-managers'][0]]['inventory_hostname']}}/
-      #interval: 60s
-      #tags:
-      #- app
-
-      # - name: register console sercice with curl check
-      # consul:
-      #service_name: docker-console
-      #service_port: 8080
-      #service_address: "{{hostvars[groups['swarm-managers'][0]]['inventory_hostname']}}"
-      #script: curl http://{{hostvars[groups['swarm-managers'][0]]['inventory_hostname']}}/console
-      #interval: 60s
-      # tags:
-      # - docker
-      #- console
-
-      # - name: register docker sercice with curl check
-      #consul:
-      #service_name: docker-master
-      # service_port: 80
-      #service_address: "{{hostvars[groups['swarm-managers'][0]]['inventory_hostname']}}"
-      #script: curl http://{{hostvars[groups['swarm-managers'][0]]['inventory_hostname']}}/
-    #interval: 60s
-    # tags:
-    #  - docker
-      
-      # - name: register docker-swarm sercice with curl check
-      #consul:
-      #service_name: docker-slave
-      #service_port: 80
-      # service_address: "{{hostvars[groups['swarm-managers'][0]]['inventory_hostname']}}"
-      # script: curl http://{{hostvars[groups['swarm-managers'][0]]['inventory_hostname']}}/
-      #interval: 60s
-      # tags:
-      # - docker

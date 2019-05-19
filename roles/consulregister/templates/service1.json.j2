@@ -1,19 +1,32 @@
 {
-"id": "{{ item.name }}",
-"name": "{{ item.name }}",
-"port": {{ item.port }},
-"checks":[
- {
-"name": "ping {{ item.name }}",
-"args": ["ping","-c1","{{ item.ip }}"],
-"interval": "10s",
-"status": "passing"
-},
-{
-"name": "curl {{ item.name }}",
-"args": ["curl","-I","{{ item.ip }}:{{ item.port }}/{{ item.script }}"],
-"interval": "10s",
-"status": "passing"
+  "Datacenter": "dc1",
+  "Node": "{{item.node}}",
+  "Address": "{{item.ip}}",
+  "TaggedAddresses": {    
+    "wan": "{{item.ip}}"
+  }, 
+  "Service": {
+    "ID": "{{ item.name }}",
+    "Service": "{{ item.name }}",
+    "Tags": [
+      "{{item.node}}",
+      "v1"
+    ],
+    "Address": "{{ item.ip }}",
+    "Port": {{ item.port }}
+  },
+  "Check": {
+    "Node": "{{item.node}}",
+    "CheckID": "service:{{ item.name }}",
+    "Name": "{{ item.name }} health check",
+    "Notes": "Script based health check",
+    "Status": "passing",
+    "ServiceID": "{{ item.name }}",
+    "Definition": {
+      	"args": ["curl","-I","{{ item.ip }}:{{ item.port }}/{{ item.script }}"],
+	"interval": "10s",
+	"status": "passing"
+    }
+  },
+  "SkipNodeUpdate": false
 }
-]}
-
